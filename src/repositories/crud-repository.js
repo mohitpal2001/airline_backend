@@ -5,13 +5,10 @@ class CrudRepository {
     }
 
     async create(data){
-        try {
+        
             const result = await this.model.create(data);
             return result;
-        } catch (error) {
-            Logger.error("Something went wrong in the crud repo:create");
-            throw error;
-        }   
+           
     }
 
     async destroy(data){

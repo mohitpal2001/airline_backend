@@ -3,6 +3,7 @@ const {airplaneService} = require("../services");
 const {StausCodes, StatusCodes} = require("http-status-codes");
 const {ErrorResponse, SuccessResponse} = require("../utils/common");
 
+
 /**
  * POST : /airplanes
  * req-body : {modelNumber,capacity} 
