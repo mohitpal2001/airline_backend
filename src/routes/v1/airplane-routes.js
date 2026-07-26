@@ -8,6 +8,8 @@ const router=express.Router();
 router.post("/",Airplanemiddleware.validateCreateRequest,airplaneController.createAirplane);
 router.get("/",airplaneController.getAllAirplanes);
 router.get("/:id",airplaneController.getAirplane);
+router.delete("/:id",airplaneController.destroyAirplane);
+router.patch("/:id",airplaneController.updateAirplane);
 
 
 module.exports=router;

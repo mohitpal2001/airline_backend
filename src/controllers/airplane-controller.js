@@ -18,7 +18,8 @@ async function createAirplane(req,res){
         return res.status(StatusCodes.CREATED).json(SuccessResponse);   
     }catch(error){
         ErrorResponse.error = error;
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+        ErrorResponse.message = error.message;
+        return res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
     }
 }
 
@@ -29,7 +30,8 @@ async function getAllAirplanes(req,res){
         return res.status(StatusCodes.OK).json(SuccessResponse);   
     }catch(error){
         ErrorResponse.error = error;
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+        ErrorResponse.message = error.message;
+        return res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
     }
 }
 
@@ -44,12 +46,48 @@ async function getAirplane(req,res){
         return res.status(StatusCodes.OK).json(SuccessResponse);   
     }catch(error){
         ErrorResponse.error = error;
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+        ErrorResponse.message = error.message;
+        return res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
     }
 }
+
+/****
+ * DELETE  :  /airplanes/:id
+ * req-body {}
+ */
+
+
+async function destroyAirplane(req,res){
+     try{
+        const response = await airplaneService.destroyAirplane(req.params.id);
+        SuccessResponse.data = response;
+        return res.status(StatusCodes.OK).json(SuccessResponse);   
+    }catch(error){
+        ErrorResponse.error = error;
+        ErrorResponse.message = error.message;
+        return res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+    }
+}
+
+
+async function updateAirplane(req,res){
+     try{
+        const response = await airplaneService.updateAirplane(req.body,req.params.id);
+        SuccessResponse.data = response;
+        return res.status(StatusCodes.OK).json(SuccessResponse);   
+    }catch(error){
+        ErrorResponse.error = error;
+        ErrorResponse.message = error.message;
+        return res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+    }
+}
+
+
 
 module.exports = {
     createAirplane,
     getAllAirplanes,
-    getAirplane
+    getAirplane,
+    destroyAirplane,
+    updateAirplane
 }

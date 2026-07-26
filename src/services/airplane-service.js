@@ -17,7 +17,7 @@ async function createAirplane(data){
     explanation.push(err.message);
    });
    console.log(explanation);
-   throw new AppError('Cannot create a new Airplane object',StatusCodes.BAD_REQUEST);
+   throw new AppError(explanation,StatusCodes.BAD_REQUEST);
   }
      throw new AppError('Cannot create a new Airplane object',StatusCodes.INTERNAL_SERVER_ERROR);
  }
@@ -29,6 +29,7 @@ async function getAirplanes(){
         const airplanes = await airplaneRepository.getAll();
         return airplanes;
     } catch (error) {
+        console.log(error);
         throw new AppError('Cannot fetch data of all  Airplane data',StatusCodes.INTERNAL_SERVER_ERROR);
     }
 }
@@ -38,11 +39,40 @@ async function getAirplane(id){
     const airplane = await airplaneRepository.get(id);
     return airplane;
     }catch(error){
-        if(error.StatusCodes==StatusCodes.NOT_FOUND){
-            throw new AppError('The airplaen you are requested is not present',error.StatusCodes)
+        console.log(error);
+        if(error.statusCode==StatusCodes.NOT_FOUND){
+            throw new AppError('The airplane you are requested is not present',error.statusCode)
         }
      throw new AppError('Can not get data of this particular id',StatusCodes.INTERNAL_SERVER_ERROR);
     }
+}
+
+async function destroyAirplane(id){
+  try{
+    const response = await airplaneRepository.destroy(id);
+    return response;
+
+  }catch(error){
+    if(error.statusCode==StatusCodes.NOT_FOUND){
+        throw new AppError('The airplane you are requested to delete is not present',error.statusCode)
+        }
+  throw new AppError('Cannot delete the airplane',StatusCodes.INTERNAL_SERVER_ERROR);
+  }
+}
+
+
+async function updateAirplane(data,id){
+ try{
+    const response = await airplaneRepository.update(data,id);
+    return response;
+
+ }catch(error){
+    if(error.statusCode==StatusCodes.NOT_FOUND){
+     throw new AppError('The airplane you are requested to update is not present',error.statusCode)
+    }
+  throw new AppError('Cannot update the airplane',StatusCodes.INTERNAL_SERVER_ERROR);
+ }
+
 }
 
 
@@ -50,5 +80,7 @@ async function getAirplane(id){
 module.exports = {
     createAirplane,
     getAirplanes,
-    getAirplane
+    getAirplane,
+    destroyAirplane,
+    updateAirplane
 }
