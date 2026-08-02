@@ -9,11 +9,13 @@ const cityRepository = new CityRepository();
 async function createCity(data) {
 
     try {
-        const airplane = await cityRepository.create(data);
-        return airplane;
+        const city = await cityRepository.create(data);
+        return city;
     } catch (error) {
         console.log(error);
-        if (error.name == 'SequelizeValidationError') {
+
+
+        if (error.name == 'SequelizeValidationError'|| error.name == 'SequelizeUniqueConstraintError') {
             let explanation = [];
             error.errors.forEach((err) => {
                 explanation.push(err.message);
@@ -21,13 +23,92 @@ async function createCity(data) {
             console.log(explanation);
             throw new AppError(explanation, StatusCodes.BAD_REQUEST);
         }
-        throw new AppError('Cannot create a new Airplane object', StatusCodes.INTERNAL_SERVER_ERROR);
+        throw new AppError('Cannot create a new City object', StatusCodes.INTERNAL_SERVER_ERROR);
     }
 
 }
 
+async function getAllCities() {
+ try{
 
+    const cities = await cityRepository.getAll();
+    return cities;
+
+ }catch(error){
+
+ if (error.name == 'SequelizeValidationError'|| error.name == 'SequelizeUniqueConstraintError') {
+            let explanation = [];
+            error.errors.forEach((err) => {
+                explanation.push(err.message);
+            });
+            console.log(explanation);
+            throw new AppError(explanation, StatusCodes.BAD_REQUEST);
+        }
+        throw new AppError('Cannot create a new City object', StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+
+}
+
+async function getCity(id) {
+    try {
+        const city = await cityRepository.get(id);
+        return city;
+    }
+    catch (error) {
+         if (error.name == 'SequelizeValidationError'|| error.name == 'SequelizeUniqueConstraintError') {
+            let explanation = [];
+            error.errors.forEach((err) => {
+                explanation.push(err.message);
+            });
+            console.log(explanation);
+            throw new AppError(explanation, StatusCodes.BAD_REQUEST);
+        }
+        throw new AppError('Cannot create a new City object', StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+
+}
+
+async function updateCity(id,data) {
+    try {
+        const city = await cityRepository.update(data,id);
+        return city;
+    }
+    catch (error) {
+         if (error.name == 'SequelizeValidationError'|| error.name == 'SequelizeUniqueConstraintError') {
+            let explanation = [];
+            error.errors.forEach((err) => {
+                explanation.push(err.message);
+            });
+            console.log(explanation);
+            throw new AppError(explanation, StatusCodes.BAD_REQUEST);
+        }
+        throw new AppError('Cannot create a new City object', StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+}
+
+async function destroyCity(id) {
+    try {
+        const city = await cityRepository.destroy(id);
+        return city;
+    }
+    catch (error) {
+         if (error.name == 'SequelizeValidationError'|| error.name == 'SequelizeUniqueConstraintError') {
+            let explanation = [];
+            error.errors.forEach((err) => {
+                explanation.push(err.message);
+            });
+            console.log(explanation);
+            throw new AppError(explanation, StatusCodes.BAD_REQUEST);
+        }
+        throw new AppError('Cannot create a new City object', StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+}
 
 module.exports = {
-    createCity
+    createCity,
+    getAllCities,
+    getCity,
+    updateCity,
+    destroyCity
+
 }
